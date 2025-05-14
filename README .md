@@ -186,7 +186,7 @@ SELECT * FROM books
 WHERE category = 'Classic';
 ```
 
-8. **Task 8: Find Total Rental Income by Category**:
+Task 8. **Task 8: Find Total Rental Income by Category**:
 
 ```sql
 SELECT 
@@ -201,13 +201,13 @@ ON b.isbn = ist.issued_book_isbn
 GROUP BY 1
 ```
 
-9. **List Members Who Registered in the Last 180 Days**:
+Task 9. **List Members Who Registered in the Last 180 Days**:
 ```sql
 SELECT * FROM members
 WHERE reg_date >= CURRENT_DATE - INTERVAL '180 days';
 ```
 
-10. **List Employees with Their Branch Manager's Name and their branch details**:
+Task 10. **List Employees with Their Branch Manager's Name and their branch details**:
 
 ```sql
 SELECT 
