@@ -138,6 +138,7 @@ WHERE member_id = 'C103';
 ```sql
 DELETE FROM issued_status
 WHERE   issued_id =   'IS121';
+SELECT * FROM issued_status
 ```
 
 **Task 4: Retrieve All Books Issued by a Specific Employee**
@@ -404,13 +405,10 @@ JOIN
 branch as b
 ON e.branch_id = b.branch_id
 GROUP BY 1, 2
-```
-
-**Task 18: Identify Members Issuing High-Risk Books**  
-Write a query to identify members who have issued books more than twice with the status "damaged" in the books table. Display the member name, book title, and the number of times they've issued damaged books.    
+```   
 
 
-**Task 19: Stored Procedure**
+**Task 18: Stored Procedure**
 Objective:
 Create a stored procedure to manage the status of books in a library system.
 Description:
@@ -475,7 +473,7 @@ WHERE isbn = '978-0-375-41398-8'
 
 
 
-**Task 20: Create Table As Select (CTAS)**
+**Task 19: Create Table As Select (CTAS)**
 Objective: Create a CTAS (Create Table As Select) query to identify overdue books and calculate fines.
 
 Description: Write a CTAS query to create a new table that lists each member and the books they have issued but not returned within 30 days. The table should include:
@@ -486,6 +484,29 @@ Description: Write a CTAS query to create a new table that lists each member and
     Member ID
     Number of overdue books
     Total fines
+
+    '''sql
+
+CREATE TABLE books_fines
+AS
+SELECT m.member_id, 
+	m.member_name, 
+	COUNT(member_id) AS books_overdue,
+	SUM((CURRENT_DATE - (i.issued_date + INTERVAL '30 Days')::DATE) * 0.50) AS total_fines	
+FROM members AS m
+JOIN issued_status AS i
+	ON i.issued_member_id = m.member_id
+LEFT JOIN return_status AS r
+	ON r.issued_id = i.issued_id
+JOIN books AS b
+	ON b.isbn = i.issued_book_isbn
+WHERE return_date IS NULL 
+	AND CURRENT_DATE - (i.issued_date + INTERVAL '30 Days')::DATE > 0
+GROUP BY 1,2
+
+SELECT * FROM books_fines
+
+    '''
 
 
 
